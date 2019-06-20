@@ -11,6 +11,7 @@ Setup:
 Running:
   * For All features integrated: ObjectDetection.py
   * For Lane detection only: Demo.py
+  * Test videos, by default, should be in 800x600 in resolution and positioned at the top left corner of the screen
 
 Implemented By:
   * Nguyễn Đức Vũ Trường: 15520951 <br>
