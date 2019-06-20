@@ -6,7 +6,12 @@ import cv2
 import math
 import time
 import pyautogui
-from directkeys import PressKey, ReleaseKey, W, A, S, D
+import os
+import six.moves.urllib as urllib
+import sys
+import tarfile
+import tensorflow as tf
+import zipfile
 #Original
 def draw_lines(img, lines):
 	try:
@@ -130,21 +135,9 @@ def process_img_improved(screen_grab):
 #Testing
 last_time = time.time()
 def main():
-	global last_time
 	while(True):
 		screen_grab = np.array(ImageGrab.grab(bbox = (0,40,800,600)))
 		screen_grab = cv2.cvtColor(screen_grab, cv2.COLOR_BGR2RGB)
-		#screen_grab = cv2.cvtColor(screen_grab, cv2.COLOR_BGR2RGB)
-		#new_screen = lane_finder(screen_grab)
-		#processed_screen = process_img(screen_grab)
-
-		print("each frame took {} sceonds", format(time.time() - last_time))
-		last_time = time.time()
-		#cv2.imshow("window1", screen_grab)
-		#cv2.imshow("window",cv2.cvtColor(screen_grab, cv2.COLOR_BGR2RGB))
-		#cv2.imshow("window",processed_screen)
-		#plt.imshow(screen_grab)
-		#plt.show()
 
 		processed_img = process_img_improved(screen_grab)
 
@@ -152,4 +145,10 @@ def main():
 
 		if cv2.waitKey(10) & 0xFF == ord('q'):
 			break
-main()
+
+def get_laned_image():
+	screen_grab = np.array(ImageGrab.grab(bbox = (0,40,800,600)))
+	screen_grab = cv2.cvtColor(screen_grab, cv2.COLOR_BGR2RGB)
+
+	processed_img = process_img_improved(screen_grab)
+	return processed_img
