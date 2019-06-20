@@ -34,8 +34,8 @@ PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
 NUM_CLASSES = 90
 
 # ## Download Model
-#opener = urllib.request.URLopener()
-#opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+opener = urllib.request.URLopener()
+opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
 tar_file = tarfile.open(MODEL_FILE)
 for file in tar_file.getmembers():
   file_name = os.path.basename(file.name)
@@ -97,6 +97,18 @@ with detection_graph.as_default():
           category_index,
           use_normalized_coordinates=True,
           line_thickness=8)
+
+      for index, box in enumerate(boxes[0]):
+        if classes[0][index] == 3 or classes[0][index] == 6 or classes[0][3] == 8:
+          if scores[0][index] > 0.5:
+            ave_x = (boxes[0][index][3]+boxes[0][index][1])/2
+            ave_y = (boxes[0][index][2] + boxes[0][index][0])/2
+            appro_dis = round((1-(boxes[0][index][3]-boxes[0][index][1]))**4,1)
+            cv2.putText(image_np, '{}'.format(appro_dis), (int(ave_x*800), int(ave_y*600)), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,255,255], 2)
+            if appro_dis <= 0.5:
+              if ave_x > 0.3 and ave_x < 0.7:
+                 cv2.putText(image_np, 'CLOSE', (int(ave_x*800), int(ave_y*600)), cv2.FONT_HERSHEY_SIMPLEX, 0.7, [255,0,0], 2)
+
       cv2.imshow('window',image_np)
       if cv2.waitKey(25) & 0xFF == ord('q'):
           cv2.destroyAllWindows()
